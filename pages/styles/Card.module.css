@@ -1,0 +1,90 @@
+.container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 900px;
+  margin-top: 3rem;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.frame {
+  position: relative;
+  width: 100%;
+  padding-bottom: 82.5%;
+  background: black;
+  box-shadow: 0 10px 7px -5px rgba(0, 0, 0, 0.3);
+}
+
+.mat {
+  position: absolute;
+  background: white;
+  top: 3.0303%; 
+  bottom: 3.0303%; 
+  left: 2.5%; 
+  right: 2.5%;
+  box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.5) inset;
+}
+
+.art {
+  position: absolute;
+  left: 13.158%; right: 13.158%;
+  top: 16.129%; bottom: 16.129%; 
+}
+
+.art img {
+  width: 100%;
+  max-height: 450px;
+  max-width: 600px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.card {
+  margin-left: 2rem;
+  width: 50%;
+  flex-basis: 45%;
+  padding: 1.5rem;
+  text-align: center;
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.card:hover,
+.card:focus,
+.card:active {
+  color: #0070f3;
+  border-color: #0070f3;
+}
+
+.card h1 {
+  margin: 0 0 1rem 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.card h2 {
+  margin: 0 0 1rem 0;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.card h3 {
+  margin: 0 0 1rem 0;
+  font-size: 10px;
+  font-weight: 300;
+}
+
+.card p {
+  margin: 0;
+  font-size: 8px;
+  line-height: 1.5;
+  font-weight: 200;
+}

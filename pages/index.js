@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-export default function Home() {
+export default function Tutorial() {
   return (
     <div className="container">
       <Head>
