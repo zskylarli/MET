@@ -59,24 +59,69 @@ export const getAllObjects = async () => {
 	if (!res.ok) {
 		return {};
 	}
+	console.log(res);
 	return res.json();
 }
 
 /**
- * requires Artist or Culture
+ * requires geolocation
  * @returns a listing of all object IDs filtered by keyword
  */
- export const getObjectTest = async () => {
-	const res = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?isOnView=true&hasImages=true&artistOrCulture=true&q=gogh`,
+ export const getObjectByGeolocation= async (keyword, query) => {
+	const keyword2 = keyword.charAt(0).toUpperCase() + keyword.slice(1);
+
+	const res = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?isOnView=true&hasImages=true&geoLocation=${keyword2}&q=${query}`,
 		{
 			method: 'GET',
 		}
 	);
 	if (!res.ok) {
+		return {};
 	}
 	console.log(res);
 	return res.json();
 }
+
+/**
+ * requires appropriate medium
+ * @returns a listing of all object IDs filtered by keyword
+ */
+ export const getObjectByMedium= async (keyword, query) => {
+	const keyword2 = keyword.charAt(0).toUpperCase() + keyword.slice(1);
+
+	const res = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?isOnView=true&hasImages=true&medium=${keyword2}&q=${query}`,
+		{
+			method: 'GET',
+		}
+	);
+	if (!res.ok) {
+		return {};
+	}
+	console.log(res);
+	return res.json();
+}
+
+/**
+ * requires time range (two dates)
+ * @returns a listing of all object IDs filtered by keyword
+ */
+ export const getObjectByTimeRange = async (keyword, query) => {
+	let result = keyword.split("-"); 
+	let begin= result[0];
+	let end= result[1];
+	const res = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?isOnView=true&hasImages=true&dateBegin=${begin}}&dateEnd=${end}&q=${query}`,
+		{
+			method: 'GET',
+			mode: 'no-cors',
+		}
+	);
+	if (!res.ok) {
+		return {};
+	}
+	console.log(res);
+	return res.json();
+}
+
 
 
 

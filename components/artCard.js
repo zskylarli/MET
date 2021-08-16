@@ -15,14 +15,9 @@ const ArtCard = ({
 	creditLine = '',
 	department = '',
 	GalleryNumber = '',
+	objectURL = '',
 	isHighlight,
 }) => {
-	const [artistInfo, setArtistInfo] = useState(true);
-
-	if(artistDisplayName===''){
-		artistDisplayName === [culture, 'artist'].join();
-		setArtistInfo(false);
-	} 
 
 	return (
 		<div className={styles.container}>
@@ -38,11 +33,12 @@ const ArtCard = ({
 				<Link href={artistWikidata_URL}>
 					<h2>{artistDisplayName}</h2>
 				</Link>
-				{artistInfo && <h3>{artistDisplayBio}</h3>}
+				<h3>{artistDisplayBio}</h3>
 
-				<h1><b>{title}</b>, {period}</h1>
-				<h3>{medium}, {dimensions}</h3>
-
+				<Link href={objectURL} style={{ textDecoration: 'none' }}>
+					<h1><b>{title}</b>, {period}</h1>
+				</Link>
+					<h3>{medium}, {dimensions}</h3>
 				<p>{creditLine}</p>
 			</div>
 		</div>
