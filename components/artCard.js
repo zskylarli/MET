@@ -13,7 +13,7 @@ const ArtCard = ({
 	medium = '',
 	dimensions = '',
 	creditLine = '',
-	department = '',
+	location = '',
 	GalleryNumber = '',
 	objectURL = '',
 	isHighlight,

@@ -11,7 +11,7 @@ const SearchForm = () => {
   const [display, setDisplay] = useState(false);
 
   const handleClick = () => {
-    console.log("bleh");
+    console.log("sent");
   }
 
   const toggleTheme = (value) => {
@@ -34,7 +34,7 @@ const SearchForm = () => {
 
     <div class="left" className="left">
       <label for="name"></label>
-      <input type="text" placeholder="My name is" name="name" id="name_input" onInput={(e) => {console.log(e.target.value); setName(e.target.value);}} />
+      <input type="text" placeholder="My name is" name="name" id="name_input" onInput={(e) => {setName(e.target.value);}} />
     </div>
     <div class="right" className="right">
       <label for="email"></label>
@@ -42,7 +42,7 @@ const SearchForm = () => {
     </div>
     <div class="keyword">
       <label for="keyword"></label>
-      <input type="text" placeholder="Plan my trip around..." id="name_input" onInput={(e) => {console.log(e.target.value); setKeyword(e.target.value);}} required/>
+      <input type="text" placeholder="Plan my trip around..." id="name_input" onInput={(e) => {setKeyword(e.target.value);}} required/>
     </div>
 
     <div class="subject">
@@ -60,7 +60,7 @@ const SearchForm = () => {
     {display && theme !== "period" && (
     <div class="keyword">
       <label for="keyword"></label>
-      <input type="text" placeholder="Keyword" id="name_input" onInput={(e) => {console.log(e.target.value); setQuery(e.target.value);}} required/>
+      <input type="text" placeholder="Keyword" id="name_input" onInput={(e) => {setQuery(e.target.value);}} required/>
     </div>
     )}
 

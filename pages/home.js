@@ -6,6 +6,7 @@ import styles from './styles/Home.module.css';
 import Link from 'next/link';
 import LottieAnimation from '../actions/Lottie';
 import home from '../public/loader.json';
+import { sortLocation } from '../actions/sortLocation.js'
 
 const ArtworkTab = () => {
 	const router = useRouter();
@@ -29,6 +30,7 @@ const ArtworkTab = () => {
 				GalleryNumber = {artwork.GalleryNumber}
 				isHighlight = {artwork.isHighlight}
 				objectURL = {artwork.objectURL}
+				location = {artwork.location}
 			/>
 		</div>
 	));
@@ -53,15 +55,36 @@ const ArtworkTab = () => {
 
 		console.log(res);
 
-		const newArtworks = Array(res.total);
-		const promiseArray = Array(res.total);
+		let limit,n,p;
+		let numbers = [];
+		if(res.total > 20){
+			limit = 20;
+			for (let i = 0; i < 20; i++) {
+				do {
+					n = Math.floor(Math.random() * (res.total+ 1));
+					p = numbers.includes(n);
+					if(!p){
+						numbers.push(n);
+					}
+				}
+				while(p);
+			}	
+		}else{
+			limit = res.total;
+			numbers = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+		}
+		console.log(numbers);
 
-		for (let i = 0; i < res.total; i += 1) {
-			promiseArray[i] = getObjectById(res.objectIDs[i]);
+		const newArtworks = Array(limit);
+		const promiseArray = Array(limit);
+
+		for (let i = 0; i < limit; i += 1) {
+			promiseArray[i] = getObjectById(res.objectIDs[numbers[i]]);
 		}
 	
 		Promise.all(promiseArray).then((values) => {
 			values.forEach((artwork, i) => {
+				let location = sortLocation(artwork.GalleryNumber);
 				newArtworks[i] = {
 					objectId: res.objectIDs[i],
 					objectName: artwork.objectName || "",
@@ -80,8 +103,18 @@ const ArtworkTab = () => {
 					objectURL: artwork.objectURL || "",
 					objectWikidata_URL: artwork.objectWikidata_URL || "",
 					isHighlight: artwork.isHighlight || "",
+					location: location || "20",
 				};
 			});
+
+			newArtworks.sort(function(a, b) {
+				var keyA = a.location,
+					keyB = b.location;
+				if (keyA < keyB) return -1;
+				if (keyA > keyB) return 1;
+				return 0;
+			});
+
 			setArtworkList(newArtworks);
 		})
 	};
