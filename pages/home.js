@@ -4,10 +4,13 @@ import { getObjectById, getObjectByArtistCulture, getObjectByGeolocation, getObj
 import ArtCard from '../components/artCard';
 import styles from './styles/Home.module.css';
 import Link from 'next/link';
+import LottieAnimation from '../actions/Lottie';
+import home from '../public/loader.json';
 
 const ArtworkTab = () => {
 	const router = useRouter();
 	const [artworkList, setArtworkList] = useState([]);
+	const [loading, setLoader] = useState(true);
 
 	const artworkTiles = (list) => list.map((artwork) => (
 		<div key={artwork.objectId} className={styles.tile}>
@@ -85,11 +88,19 @@ const ArtworkTab = () => {
 
 	useEffect(() => {
     fetchDefault();
+		setTimeout(() => {
+			setLoader(false);
+		}, 5000);
   }, []);
 
 	return(
-		<div>    
-			<Link href="/"><i class="bi bi-arrow-bar-left"></i></Link>
+		<div>
+			{loading && (
+				<div className={styles.loaderBox}> 
+					<LottieAnimation lotti={home} height={500} width={500} />
+		 		</div>
+			)}
+				
 			<Link href="/">Return</Link>
 			{artworkTiles(artworkList)}
 

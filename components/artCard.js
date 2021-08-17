@@ -18,13 +18,15 @@ const ArtCard = ({
 	objectURL = '',
 	isHighlight,
 }) => {
+	const [loadStyle, setStyle] = useState(styles.loadingImg); 
+	const [loaded, setLoaded] = useState(false);
 
 	return (
 		<div className={styles.container}>
 			<div className={styles.frame}> 
 				<div className={styles.mat}>
-					<div className={styles.art}>
-						<img src={primaryImage} />
+					<div className={loadStyle}>
+							<img src={primaryImage} style={loaded ? {} :{display:'none'}} onLoad={() => {setLoaded(true); setStyle(styles.art);}}/>
 					</div>
 				</div>
 			</div>
