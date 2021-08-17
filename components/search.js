@@ -3,11 +3,25 @@ import Link from 'next/link';
 
 const SearchForm = () => {
   const [keyword, setKeyword] = useState('');
+  const [name, setName] = useState('');
   const [query, setQuery] = useState('');
+  const [begin, setDate1] = useState('');
+  const [end, setDate2] = useState('');
   const [theme, setTheme] = useState('');
+  const [display, setDisplay] = useState(false);
 
   const handleClick = () => {
     console.log("bleh");
+  }
+
+  const toggleTheme = (value) => {
+    if (value === "medium") {
+			setDisplay(true);
+		} else if (value === "geolocation") {
+			setDisplay(true);
+		} else if (value === "period") {
+			setDisplay(true);
+		}
   }
 
 
@@ -16,12 +30,13 @@ const SearchForm = () => {
   <div id="container">
   <h1> Concierge </h1>
   <div class="underline"></div>
-  <form action="#" method="post" id="contact_form">
-    <div class="name">
+  <form action="#" method="post" id="query_form">
+
+    <div class="left" className="left">
       <label for="name"></label>
-      <input type="text" placeholder="My name is" name="name" id="name_input" />
+      <input type="text" placeholder="My name is" name="name" id="name_input" onInput={(e) => {console.log(e.target.value); setName(e.target.value);}} />
     </div>
-    <div class="email">
+    <div class="right" className="right">
       <label for="email"></label>
       <input type="email" placeholder="My e-mail is" name="email" id="email_input" />
     </div>
@@ -29,13 +44,10 @@ const SearchForm = () => {
       <label for="keyword"></label>
       <input type="text" placeholder="Plan my trip around..." id="name_input" onInput={(e) => {console.log(e.target.value); setKeyword(e.target.value);}} required/>
     </div>
-    <div class="keyword">
-      <label for="keyword"></label>
-      <input type="text" placeholder="Keyword" id="name_input" onInput={(e) => {console.log(e.target.value); setQuery(e.target.value);}} required/>
-    </div>
+
     <div class="subject">
       <label for="subject"></label>
-      <select placeholder="Category" name="subject" id="subject_input" onChange={e => setTheme(e.target.value)} required>
+      <select placeholder="Category" name="subject" id="subject_input" onChange={(e) => {toggleTheme(e.target.value); setTheme(e.target.value);}} required>
         <option disabled hidden selected>Subject line</option>
         <option value="artistculture">Artist</option>
         <option value="artistculture">Culture</option>
@@ -44,6 +56,27 @@ const SearchForm = () => {
         <option value="period">Time period</option>
       </select>
     </div>
+
+    {display && theme !== "period" && (
+    <div class="keyword">
+      <label for="keyword"></label>
+      <input type="text" placeholder="Keyword" id="name_input" onInput={(e) => {console.log(e.target.value); setQuery(e.target.value);}} required/>
+    </div>
+    )}
+
+    {theme === "period" && (
+    <div className="dateContainer">
+      <div className="left">
+        <label for="begin date"></label>
+        <input type="text" placeholder="Begin date" onChange={(e) => {setDate1(e.target.value);}} required/>
+      </div>
+      <div className="right">
+        <label for="end date"></label>
+        <input type="text" placeholder="End date" onChange={(e) => {setDate2(e.target.value);}} required/>
+      </div>
+    </div>
+    )}
+
     <div class="submit">
     <Link
       href={{
@@ -52,10 +85,14 @@ const SearchForm = () => {
           keyword: keyword,
           theme: theme,
           query: query,
+          name: name,
+          begin: begin,
+          end: end,
         },
       }}
+      as={`/${name}strip`}
     >
-      <input value="Send Message" id="form_button" onClick={handleClick}/>
+      <input value="Send" id="form_button" onClick={handleClick}/>
     </Link>
     </div>
   </form>
@@ -132,7 +169,7 @@ const SearchForm = () => {
       width: 50px;
     }
 
-    .email {
+    .right {
       float: right;
       width: 45%;
     }
@@ -166,11 +203,6 @@ const SearchForm = () => {
       padding: 0 0 0.875em 0;
     }
 
-    .name {
-      float: left;
-      width: 45%;
-    }
-
     select {
       background: url('https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-arrow-down-32.png') no-repeat right;
       outline: none;
@@ -184,6 +216,16 @@ const SearchForm = () => {
 
     .subject {
       width: 100%;
+    }
+
+    .left {
+      float: left;
+      width: 45%;
+    }
+
+    .dateContainer {
+      width: 80%;
+      margin: 0 auto;
     }
 
     textarea {
@@ -212,7 +254,8 @@ const SearchForm = () => {
     }
 
     #form_button {
-      transform: translate(125%, 0);
+      transform: translate(100%, 0);
+      text-align: center;
       background: none;
       border: solid 2px #474544;
       color: #474544;

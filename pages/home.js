@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { getObjectById, getObjectByArtistCulture, getObjectByGeolocation, getObjectByMedium, getObjectByTimeRange } from '../actions/getInfo.js';
 import ArtCard from '../components/artCard';
 import styles from './styles/Home.module.css';
+import Link from 'next/link';
 
 const ArtworkTab = () => {
 	const router = useRouter();
@@ -30,10 +31,10 @@ const ArtworkTab = () => {
 	));
 
 	const fetchDefault = async () => {
+		let res4 = await getObjectByTimeRange(router.query.begin, router.query.end, router.query.keyword);
 		let res1 = await getObjectByArtistCulture(router.query.keyword);
 		let res2 = await getObjectByMedium(router.query.keyword, router.query.query);
 		let res3 = await getObjectByGeolocation(router.query.keyword, router.query.query);
-		let res4 = await getObjectByTimeRange(router.query.keyword, router.query.query);
 		
 		let res;
 		if (router.query.theme === "artistculture") {
@@ -43,10 +44,11 @@ const ArtworkTab = () => {
 		} else if (router.query.theme === "geolocation") {
 			res = res3;
 		} else if (router.query.theme === "period") {
+			console.log(router.query.begin);
 			res = res4;
 		}
 
-		console.log(res4);
+		console.log(res);
 
 		const newArtworks = Array(res.total);
 		const promiseArray = Array(res.total);
@@ -86,7 +88,9 @@ const ArtworkTab = () => {
   }, []);
 
 	return(
-		<div>
+		<div>    
+			<Link href="/"><i class="bi bi-arrow-bar-left"></i></Link>
+			<Link href="/">Return</Link>
 			{artworkTiles(artworkList)}
 
 			<style jsx global>{`

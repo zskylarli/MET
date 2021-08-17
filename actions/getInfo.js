@@ -105,14 +105,10 @@ export const getAllObjects = async () => {
  * requires time range (two dates)
  * @returns a listing of all object IDs filtered by keyword
  */
- export const getObjectByTimeRange = async (keyword, query) => {
-	let result = keyword.split("-"); 
-	let begin= result[0];
-	let end= result[1];
-	const res = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?isOnView=true&hasImages=true&dateBegin=${begin}}&dateEnd=${end}&q=${query}`,
+ export const getObjectByTimeRange = async (begin, end, query) => {
+	const res = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/search?isOnView=true&hasImages=true&dateBegin=${begin}&dateEnd=${end}&q=${query}`,
 		{
 			method: 'GET',
-			mode: 'no-cors',
 		}
 	);
 	if (!res.ok) {
