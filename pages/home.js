@@ -257,6 +257,7 @@ const ArtworkTab = () => {
 			<style jsx global>{`
 			@import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600&display=swap');
 			@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
+			@import url(https://use.fontawesome.com/releases/v5.3.1/css/all.css);
 			html,
 			body {
 				padding: 0;
