@@ -118,7 +118,7 @@
 }
 
 .card i {
-  position: absolute;
-  right: 1.5%;
-  top: 39.0303%; 
+  position: relative;
+  right: -50%;
+  top: 4.0303%; 
 }

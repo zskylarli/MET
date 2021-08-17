@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { getObjectById, getObjectByArtistCulture, getObjectByGeolocation, getObjectByMedium, getObjectByTimeRange } from '../actions/getInfo.js';
 import ArtCard from '../components/artCard';
 import styles from './styles/Home.module.css';
-import Link from 'next/link';
+import { makeMessage } from '../actions/copy.js';
 import LottieAnimation from '../actions/Lottie';
 import home from '../public/loader.json';
 import { sortLocation } from '../actions/sortLocation.js';
@@ -13,7 +13,8 @@ const ArtworkTab = () => {
 	const router = useRouter();
 	const [artworkList, setArtworkList] = useState([]);
 	const [loading, setLoader] = useState(true);
-	const [galleryNum, setHover] = useState('');
+	const [galleryNum, setHover] = useState('9');
+	const [copied, setCopy] = useState(false);
 
 	const artworkTiles = (list) => list.map((artwork) => (
 		<div key={artwork.objectId} className={styles.tile}>
@@ -92,7 +93,7 @@ const ArtworkTab = () => {
 					objectName: artwork.objectName || "",
 					title: artwork.title || "",
 					primaryImage: artwork.primaryImage || "",
-					artistDisplayName: artwork.artistDisplayName || "",
+					artistDisplayName: artwork.artistDisplayName || "Unknown",
 					artistDisplayBio: artwork.artistDisplayBio || "",
 					artistWikidata_URL: artwork.artistWikidata_URL || "",
 					dimensions: artwork.dimensions || "",
@@ -127,6 +128,16 @@ const ArtworkTab = () => {
 	}
 	let gallery = `gallery${galleryNum}`;
 
+	const copyCodeToClipboard = () => {
+		const message = makeMessage(artworkList);
+    const el = document.createElement('textarea');
+		el.value = message;
+		document.body.appendChild(el);
+		el.select();
+		document.execCommand('copy');
+		document.body.removeChild(el);
+		setCopy(true);
+  }
 
 	useEffect(() => {
     fetchDefault();
@@ -146,69 +157,100 @@ const ArtworkTab = () => {
 			<Image src="/map1.svg" alt="1F" height={590} width={884} quality={100} layout={"responsive"}/>
 			<img src={`/1F/Gallery${galleryNum}.png`} className={`${styles.overlay} ${gallery}`}/>
 
+			<button type="button" className="btn btn-primary" onClick={() => copyCodeToClipboard()}>
+			{!copied && <div><i className="bi bi-clipboard"></i>  Share This Itinerary</div>}
+			{copied && <div><i className="bi bi-clipboard-check"></i>  Copied! </div>}
+      </button>
+
 			{artworkTiles(artworkList)}
 
 			<style jsx>{`
-      .gallery0{
-        top: 51%;
-        right: 0.15%;
-        width: 43.4%;
-      }
+				.btn {
+					position: fixed;
+					right: 0;
+					top: 1vh;
+					font-size: 16px;
+					padding: 1rem 1.5rem;
+					cursor: pointer;
+				}
 
-      .gallery1{
-        top: 10.8%;
-        right: 4%;
-        width: 29.5%;
-      }
-
-      .gallery2{
-        top: 53%;
-        right: 17%;
-        width: 17%;
-      }
-
-      .gallery3{
-        top: 25.5%;
-        right: 33%;
-        width: 23%;
-      }
-
-      .gallery4{
-        top: -0.75%;
-        right: 39.95%;
-        width: 20.7%;
-      }
-
-      .gallery5{
-        top: 24%;
-        left: 20.6%;
-        width: 26.5%;
-      }
-
-      .gallery6{
-        top: 11.75%;
-        left: 3.25%;
-        width: 18.45%;
-      }
-
-      .gallery7{
-        top: 51%;
-        left: 0.3%;
-        width: 21%;
-      }
-
-      .gallery8{
-        top: 71.5%;
-        left: 0%;
-        width: 40%;
-      }
-
-      .gallery9{
-        top: 37%;
-        left: 44.6%;
-        width: 10.5%;
-      }
-
+				.gallery0{
+					top: 51%;
+					right: 0.15%;
+					width: 43.4%;
+					transform: translate(0, var(--moveTop));
+				}
+	
+				.gallery1{
+					top: 10.8%;
+					right: 4%;
+					width: 29.5%;
+					transform: translate(0, calc(var(--moveTop) + 4%));
+				}
+	
+				.gallery2{
+					top: 53%;
+					right: 17%;
+					width: 17%;
+					transform: translate(0, calc(var(--moveTop) - 11.5%));
+				}
+	
+				.gallery3{
+					top: 25.5%;
+					right: 33%;
+					width: 23%;
+					transform: translate(0, calc(var(--moveTop) + 1.5%));
+				}
+	
+				.gallery4{
+					top: -0.75%;
+					right: 39.95%;
+					width: 20.7%;
+					transform: translate(0, calc(var(--moveTop) + 6.5%));
+				}
+	
+				.gallery5{
+					top: 24%;
+					left: 20.6%;
+					width: 26.5%;
+					transform: translate(0, calc(var(--moveTop) + 4.2%));
+				}
+	
+				.gallery6{
+					top: 11.75%;
+					left: 3.25%;
+					width: 18.45%;
+					transform: translate(0, calc(var(--moveTop) + 4.2%));
+				}
+	
+				.gallery7{
+					top: 51%;
+					left: 0.3%;
+					width: 21%;
+					transform: translate(0, calc(var(--moveTop) - 4.2%));
+				}
+	
+				.gallery8{
+					top: 71.5%;
+					left: 0%;
+					width: 40%;
+					transform: translate(0, calc(var(--moveTop) - 7.5%));
+				}
+	
+				.gallery9{
+					top: 37%;
+					left: 44.6%;
+					width: 10.5%;
+					transform: translate(0, var(--moveTop));
+				}
+	
+				@media (max-width: 2560px) {
+					--moveTop: -6.5%;
+				}
+	
+				@media (min-width: 3000px) {
+					--moveTop: 15%;
+				}
           
         `}</style>
 
