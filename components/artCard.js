@@ -17,6 +17,7 @@ const ArtCard = ({
 	GalleryNumber = '',
 	objectURL = '',
 	isHighlight,
+	handleHover = () => {},
 }) => {
 	const [loadStyle, setStyle] = useState(styles.loadingImg); 
 	const [loaded, setLoaded] = useState(false);
@@ -30,7 +31,7 @@ const ArtCard = ({
 					</div>
 				</div>
 			</div>
-			<div className={styles.card}>
+			<div className={styles.card} onClick={() => {console.log(location); handleHover(location);}}>
 				{isHighlight && <i class="bi bi-bookmark-star"></i>}
 				<Link href={artistWikidata_URL}>
 					<h2>{artistDisplayName}</h2>
@@ -38,7 +39,7 @@ const ArtCard = ({
 				<h3>{artistDisplayBio}</h3>
 
 				<Link href={objectURL} style={{ textDecoration: 'none' }}>
-					<h1><b>{title}</b>, {period}</h1>
+					<h1><b>{title}</b> {period}</h1>
 				</Link>
 					<h3>{medium}, {dimensions}</h3>
 				<p>{creditLine}</p>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/router'
 import { getObjectById, getObjectByArtistCulture, getObjectByGeolocation, getObjectByMedium, getObjectByTimeRange } from '../actions/getInfo.js';
 import ArtCard from '../components/artCard';
@@ -6,12 +7,13 @@ import styles from './styles/Home.module.css';
 import Link from 'next/link';
 import LottieAnimation from '../actions/Lottie';
 import home from '../public/loader.json';
-import { sortLocation } from '../actions/sortLocation.js'
+import { sortLocation } from '../actions/sortLocation.js';
 
 const ArtworkTab = () => {
 	const router = useRouter();
 	const [artworkList, setArtworkList] = useState([]);
 	const [loading, setLoader] = useState(true);
+	const [galleryNum, setHover] = useState('');
 
 	const artworkTiles = (list) => list.map((artwork) => (
 		<div key={artwork.objectId} className={styles.tile}>
@@ -31,6 +33,7 @@ const ArtworkTab = () => {
 				isHighlight = {artwork.isHighlight}
 				objectURL = {artwork.objectURL}
 				location = {artwork.location}
+				handleHover = {setHover}
 			/>
 		</div>
 	));
@@ -73,7 +76,6 @@ const ArtworkTab = () => {
 			limit = res.total;
 			numbers = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
 		}
-		console.log(numbers);
 
 		const newArtworks = Array(limit);
 		const promiseArray = Array(limit);
@@ -119,6 +121,13 @@ const ArtworkTab = () => {
 		})
 	};
 
+	console.log(galleryNum);
+	if(galleryNum >= 10){
+		setHover(0);
+	}
+	let gallery = `gallery${galleryNum}`;
+
+
 	useEffect(() => {
     fetchDefault();
 		setTimeout(() => {
@@ -133,9 +142,75 @@ const ArtworkTab = () => {
 					<LottieAnimation lotti={home} height={500} width={500} />
 		 		</div>
 			)}
-				
-			<Link href="/">Return</Link>
+
+			<Image src="/map1.svg" alt="1F" height={590} width={884} quality={100} layout={"responsive"}/>
+			<img src={`/1F/Gallery${galleryNum}.png`} className={`${styles.overlay} ${gallery}`}/>
+
 			{artworkTiles(artworkList)}
+
+			<style jsx>{`
+      .gallery0{
+        top: 51%;
+        right: 0.15%;
+        width: 43.4%;
+      }
+
+      .gallery1{
+        top: 10.8%;
+        right: 4%;
+        width: 29.5%;
+      }
+
+      .gallery2{
+        top: 53%;
+        right: 17%;
+        width: 17%;
+      }
+
+      .gallery3{
+        top: 25.5%;
+        right: 33%;
+        width: 23%;
+      }
+
+      .gallery4{
+        top: -0.75%;
+        right: 39.95%;
+        width: 20.7%;
+      }
+
+      .gallery5{
+        top: 24%;
+        left: 20.6%;
+        width: 26.5%;
+      }
+
+      .gallery6{
+        top: 11.75%;
+        left: 3.25%;
+        width: 18.45%;
+      }
+
+      .gallery7{
+        top: 51%;
+        left: 0.3%;
+        width: 21%;
+      }
+
+      .gallery8{
+        top: 71.5%;
+        left: 0%;
+        width: 40%;
+      }
+
+      .gallery9{
+        top: 37%;
+        left: 44.6%;
+        width: 10.5%;
+      }
+
+          
+        `}</style>
 
 			<style jsx global>{`
 			@import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600&display=swap');

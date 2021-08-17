@@ -29,7 +29,7 @@ const SearchForm = () => {
   <div>
   <div id="container">
   <h1> Concierge </h1>
-  <div class="underline"></div>
+  <div className="underline"></div>
   <form action="#" method="post" id="query_form">
 
     <div class="left" className="left">
