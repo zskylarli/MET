@@ -15,6 +15,122 @@ const ArtworkTab = () => {
 	const [loading, setLoader] = useState(true);
 	const [galleryNum, setHover] = useState('9');
 	const [copied, setCopy] = useState(false);
+	const [suggest, setSuggest] = useState(false);
+	const [empty, setEmpty] = useState(false);
+
+	const fetchDefault = async () => {
+		const date = await getObjectByTimeRange(router.query.begin, router.query.end, router.query.keyword);
+		const culture = await getObjectByArtistCulture(router.query.keyword);
+		const medium = await getObjectByMedium(router.query.keyword, router.query.query);
+		const geolocation = await getObjectByGeolocation(router.query.keyword, router.query.query);
+		const resArray = [culture, medium, geolocation, date];
+		console.log(resArray);
+		
+		let res;
+		const max = Math.max(culture.total, medium.total, geolocation.total, date.total);
+
+		if (router.query.theme === "artistculture" && culture.total !== 0) {
+			res = culture;
+		} else if (router.query.theme === "medium" && medium.total !== 0) {
+			res = medium;
+		} else if (router.query.theme === "geolocation" && geolocation.total !== 0) {
+			res = geolocation;
+		} else if (router.query.theme === "period" && date.total !== 0) {
+			res = date;
+		} else if (max === 0) {
+			setEmpty(true);	
+			res = null;
+		}	else {
+			const maxRes = resArray.find( (res) => res.total === max );
+			res = maxRes;
+			setSuggest(true);
+		}
+
+		console.log(res);
+
+		//generate random numbers to index artworks for large res
+		let limit,n,p;
+		let numbers = [];
+		if(res !== null && res.total > 20){
+			limit = 20;
+			for (let i = 0; i < 20; i++) {
+				do {
+					n = Math.floor(Math.random() * (res.total+ 1));
+					p = numbers.includes(n);
+					if(!p){
+						numbers.push(n);
+					}
+				}
+				while(p);
+			}	
+		} else{
+			limit = res.total;
+			numbers = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+		}
+
+		const newArtworks = Array(limit);
+		const promiseArray = Array(limit);
+
+		if (res !== null){
+			for (let i = 0; i < limit; i += 1) {
+				promiseArray[i] = getObjectById(res.objectIDs[numbers[i]]);
+			}
+
+			Promise.all(promiseArray).then((values) => {
+				values.forEach((artwork, i) => {
+					let location = sortLocation(artwork.GalleryNumber);
+					newArtworks[i] = {
+						objectId: res.objectIDs[i],
+						objectName: artwork.objectName || "",
+						title: artwork.title || "",
+						primaryImage: artwork.primaryImage || "",
+						artistDisplayName: artwork.artistDisplayName || "Unknown",
+						artistDisplayBio: artwork.artistDisplayBio || "",
+						artistWikidata_URL: artwork.artistWikidata_URL || "",
+						dimensions: artwork.dimensions || "",
+						culture: artwork.culture || "",
+						period: artwork.period || "",
+						medium: artwork.medium || "",
+						creditLine: artwork.creditLine || "",
+						department: artwork.department || "",
+						GalleryNumber: artwork.GalleryNumber || "",
+						objectURL: artwork.objectURL || "",
+						objectWikidata_URL: artwork.objectWikidata_URL || "",
+						isHighlight: artwork.isHighlight || "",
+						location: location || "20",
+					};
+				});
+	
+				newArtworks.sort(function(a, b) {
+					var keyA = a.location,
+						keyB = b.location;
+					if (keyA < keyB) return -1;
+					if (keyA > keyB) return 1;
+					return 0;
+				});
+	
+				setArtworkList(newArtworks);
+			})
+
+		};
+	}
+
+	//remove when 2F map is added
+	if(galleryNum >= 10){
+		setHover(0);
+	}
+	let gallery = `gallery${galleryNum}`;
+
+	const copyCodeToClipboard = () => {
+		const message = makeMessage(artworkList);
+    const el = document.createElement('textarea');
+		el.value = message;
+		document.body.appendChild(el);
+		el.select();
+		document.execCommand('copy');
+		document.body.removeChild(el);
+		setCopy(true);
+  }
 
 	const artworkTiles = (list) => list.map((artwork) => (
 		<div key={artwork.objectId} className={styles.tile}>
@@ -39,106 +155,6 @@ const ArtworkTab = () => {
 		</div>
 	));
 
-	const fetchDefault = async () => {
-		let res4 = await getObjectByTimeRange(router.query.begin, router.query.end, router.query.keyword);
-		let res1 = await getObjectByArtistCulture(router.query.keyword);
-		let res2 = await getObjectByMedium(router.query.keyword, router.query.query);
-		let res3 = await getObjectByGeolocation(router.query.keyword, router.query.query);
-		
-		let res;
-		if (router.query.theme === "artistculture") {
-			res = res1;
-		} else if (router.query.theme === "medium") {
-			res = res2;
-		} else if (router.query.theme === "geolocation") {
-			res = res3;
-		} else if (router.query.theme === "period") {
-			console.log(router.query.begin);
-			res = res4;
-		}
-
-		console.log(res);
-
-		let limit,n,p;
-		let numbers = [];
-		if(res.total > 20){
-			limit = 20;
-			for (let i = 0; i < 20; i++) {
-				do {
-					n = Math.floor(Math.random() * (res.total+ 1));
-					p = numbers.includes(n);
-					if(!p){
-						numbers.push(n);
-					}
-				}
-				while(p);
-			}	
-		}else{
-			limit = res.total;
-			numbers = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
-		}
-
-		const newArtworks = Array(limit);
-		const promiseArray = Array(limit);
-
-		for (let i = 0; i < limit; i += 1) {
-			promiseArray[i] = getObjectById(res.objectIDs[numbers[i]]);
-		}
-	
-		Promise.all(promiseArray).then((values) => {
-			values.forEach((artwork, i) => {
-				let location = sortLocation(artwork.GalleryNumber);
-				newArtworks[i] = {
-					objectId: res.objectIDs[i],
-					objectName: artwork.objectName || "",
-					title: artwork.title || "",
-					primaryImage: artwork.primaryImage || "",
-					artistDisplayName: artwork.artistDisplayName || "Unknown",
-					artistDisplayBio: artwork.artistDisplayBio || "",
-					artistWikidata_URL: artwork.artistWikidata_URL || "",
-					dimensions: artwork.dimensions || "",
-					culture: artwork.culture || "",
-					period: artwork.period || "",
-					medium: artwork.medium || "",
-					creditLine: artwork.creditLine || "",
-					department: artwork.department || "",
-					GalleryNumber: artwork.GalleryNumber || "",
-					objectURL: artwork.objectURL || "",
-					objectWikidata_URL: artwork.objectWikidata_URL || "",
-					isHighlight: artwork.isHighlight || "",
-					location: location || "20",
-				};
-			});
-
-			newArtworks.sort(function(a, b) {
-				var keyA = a.location,
-					keyB = b.location;
-				if (keyA < keyB) return -1;
-				if (keyA > keyB) return 1;
-				return 0;
-			});
-
-			setArtworkList(newArtworks);
-		})
-	};
-
-	console.log(galleryNum);
-	if(galleryNum >= 10){
-		setHover(0);
-	}
-	let gallery = `gallery${galleryNum}`;
-
-	const copyCodeToClipboard = () => {
-		const message = makeMessage(artworkList);
-    const el = document.createElement('textarea');
-		el.value = message;
-		document.body.appendChild(el);
-		el.select();
-		document.execCommand('copy');
-		document.body.removeChild(el);
-		setCopy(true);
-  }
-
 	useEffect(() => {
     fetchDefault();
 		setTimeout(() => {
@@ -157,12 +173,21 @@ const ArtworkTab = () => {
 			<Image src="/map1.svg" alt="1F" height={590} width={884} quality={100} layout={"responsive"}/>
 			<img src={`/1F/Gallery${galleryNum}.png`} className={`${styles.overlay} ${gallery}`}/>
 
-			<button type="button" className="btn btn-primary" onClick={() => copyCodeToClipboard()}>
-			{!copied && <div><i className="bi bi-clipboard"></i>  Share This Itinerary</div>}
-			{copied && <div><i className="bi bi-clipboard-check"></i>  Copied! </div>}
-      </button>
+			{!empty && <div>
+				<button type="button" className="btn btn-primary" onClick={() => copyCodeToClipboard()}>
+				{!copied && <div><i className="bi bi-clipboard"></i>  Share This Itinerary</div>}
+				{copied && <div><i className="bi bi-clipboard-check"></i>  Copied! </div>}
+				</button>
+			</div>}
 
-			{artworkTiles(artworkList)}
+			{suggest && <div>
+				<h3>Did you mean to search by a different criteria?</h3>
+				<p>Showing alternative results...</p>
+			</div>}
+
+			{!empty && <div>
+				{artworkTiles(artworkList)}
+			</div>}
 
 			<style jsx>{`
 				.btn {
