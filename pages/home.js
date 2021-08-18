@@ -7,13 +7,15 @@ import styles from './styles/Home.module.css';
 import { makeMessage } from '../actions/copy.js';
 import LottieAnimation from '../actions/Lottie';
 import home from '../public/loader.json';
+import notfound from '../public/notfound.json';
 import { sortLocation } from '../actions/sortLocation.js';
+import Link from 'next/link';
 
 const ArtworkTab = () => {
 	const router = useRouter();
 	const [artworkList, setArtworkList] = useState([]);
 	const [loading, setLoader] = useState(true);
-	const [galleryNum, setHover] = useState('9');
+	const [galleryNum, setHover] = useState('0-9');
 	const [copied, setCopy] = useState(false);
 	const [suggest, setSuggest] = useState(false);
 	const [empty, setEmpty] = useState(false);
@@ -51,21 +53,23 @@ const ArtworkTab = () => {
 		//generate random numbers to index artworks for large res
 		let limit,n,p;
 		let numbers = [];
-		if(res !== null && res.total > 20){
-			limit = 20;
-			for (let i = 0; i < 20; i++) {
-				do {
-					n = Math.floor(Math.random() * (res.total+ 1));
-					p = numbers.includes(n);
-					if(!p){
-						numbers.push(n);
+		if(res !== null ){
+			if(res.total > 20){
+				limit = 20;
+				for (let i = 0; i < 20; i++) {
+					do {
+						n = Math.floor(Math.random() * (res.total+ 1));
+						p = numbers.includes(n);
+						if(!p){
+							numbers.push(n);
+						}
 					}
-				}
-				while(p);
-			}	
-		} else{
-			limit = res.total;
-			numbers = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+					while(p);
+				}	
+			} else{
+				limit = res.total;
+				numbers = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+			}
 		}
 
 		const newArtworks = Array(limit);
@@ -170,10 +174,10 @@ const ArtworkTab = () => {
 		 		</div>
 			)}
 
+			{!empty && <div>
 			<Image src="/map1.svg" alt="1F" height={590} width={884} quality={100} layout={"responsive"}/>
 			<img src={`/1F/Gallery${galleryNum}.png`} className={`${styles.overlay} ${gallery}`}/>
-
-			{!empty && <div>
+		
 				<button type="button" className="btn btn-primary" onClick={() => copyCodeToClipboard()}>
 				{!copied && <div><i className="bi bi-clipboard"></i>  Share This Itinerary</div>}
 				{copied && <div><i className="bi bi-clipboard-check"></i>  Copied! </div>}
@@ -185,11 +189,21 @@ const ArtworkTab = () => {
 				<p>Showing alternative results...</p>
 			</div>}
 
+			{empty && <div className={styles.notFoundBox}>
+					<LottieAnimation lotti={notfound} height={500} width={500} />
+				<h3>Maybe for a trip to another museum...plan <Link href='/'><span>a new trip?</span></Link></h3>
+			</div>}
+
 			{!empty && <div>
 				{artworkTiles(artworkList)}
 			</div>}
 
 			<style jsx>{`
+				span {
+					textDecoration: none;
+					cursor: pointer;
+				}
+
 				.btn {
 					position: fixed;
 					right: 0;
@@ -197,6 +211,13 @@ const ArtworkTab = () => {
 					font-size: 16px;
 					padding: 1rem 1.5rem;
 					cursor: pointer;
+				}
+
+				.gallery0-9{
+					top: 6.25%;
+					left: -0.2%;
+					width: 100%;
+					transform: translate(0, var(--moveTop));
 				}
 
 				.gallery0{

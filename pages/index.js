@@ -2,11 +2,13 @@
 // import NestedLayout from '../components/nested-layout'
 import React from 'react';
 import SearchForm from '../components/search';
+import Slideshow from '../components/slideshow';
 
 export default function Page() {
 
   return (
     <div>
+      <Slideshow />
 			<SearchForm />
 
 			<style jsx global>{`
