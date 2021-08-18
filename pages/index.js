@@ -3,13 +3,37 @@
 import React from 'react';
 import SearchForm from '../components/search';
 import Slideshow from '../components/slideshow';
+import Image from 'next/image';
 
 export default function Page() {
 
   return (
     <div>
+      <div className="logoContainer">
+        <img src='/metlogo.png' className='logo'/>
+      </div>
       <Slideshow />
+
 			<SearchForm />
+
+      <style jsx>{`
+      .logoContainer {
+        z-index: 3;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        text-align: center;
+      }
+			.logo {
+        position:absolute;
+        width:30vw;
+        top:50%;
+        left:50%;
+        transform: translate(-50%, -50%);
+      }
+
+		`}</style>
 
 			<style jsx global>{`
 			@import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600&display=swap');
