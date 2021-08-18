@@ -48,15 +48,14 @@ const ArtworkTab = () => {
 			setSuggest(true);
 		}
 
-		console.log(res);
-
 		//generate random numbers to index artworks for large res
 		let limit,n,p;
 		let numbers = [];
+		let maxView = Math.floor(router.query.time * 12);
 		if(res !== null ){
-			if(res.total > 20){
-				limit = 20;
-				for (let i = 0; i < 20; i++) {
+			if(res.total > maxView){
+				limit = maxView;
+				for (let i = 0; i < maxView; i++) {
 					do {
 						n = Math.floor(Math.random() * (res.total+ 1));
 						p = numbers.includes(n);
@@ -68,7 +67,7 @@ const ArtworkTab = () => {
 				}	
 			} else{
 				limit = res.total;
-				numbers = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+				numbers = range(0, limit);
 			}
 		}
 
@@ -184,8 +183,9 @@ const ArtworkTab = () => {
 				</button>
 			</div>}
 
-			{suggest && <div>
+			{suggest && <div className="suggestionBox">
 				<h3>Did you mean to search by a different criteria?</h3>
+				<br></br>
 				<p>Showing alternative results...</p>
 			</div>}
 
@@ -202,6 +202,17 @@ const ArtworkTab = () => {
 				span {
 					textDecoration: none;
 					cursor: pointer;
+				}
+
+				.suggestionBox {
+					display: inline-flex;
+    			align-items: center;
+    			justify-content: center;
+					flex-direction: column;
+					background-color: #E4022B;
+					width: 100%;
+					height: 20vh;
+					color: white;
 				}
 
 				.btn {
@@ -290,8 +301,8 @@ const ArtworkTab = () => {
 					transform: translate(0, var(--moveTop));
 				}
 	
-				@media (max-width: 2560px) {
-					--moveTop: -6.5%;
+				@media (max-width: 2600px) {
+					--moveTop: -6%;
 				}
 	
 				@media (min-width: 3000px) {

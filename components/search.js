@@ -8,6 +8,7 @@ const SearchForm = () => {
   const [begin, setDate1] = useState('');
   const [end, setDate2] = useState('');
   const [theme, setTheme] = useState('');
+  const [time, setTime] = useState(2);
   const [display, setDisplay] = useState(false);
 
   const handleClick = () => {
@@ -37,8 +38,8 @@ const SearchForm = () => {
       <input type="text" placeholder="My name is" name="name" id="name_input" onInput={(e) => {setName(e.target.value);}} />
     </div>
     <div class="right" className="right">
-      <label for="email"></label>
-      <input type="email" placeholder="My e-mail is" name="email" id="email_input" />
+      <label for="number"></label>
+      <input type="text" placeholder="Duration of stay (hrs)" name="duration" id="duration_input" onInput={(e) => {setTime(e.target.value);}} />
     </div>
     <div class="keyword">
       <label for="keyword"></label>
@@ -88,6 +89,7 @@ const SearchForm = () => {
           name: name,
           begin: begin,
           end: end,
+          time: time,
         },
       }}
       as={`/${name}strip`}
