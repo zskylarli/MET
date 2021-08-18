@@ -9,7 +9,7 @@
     return 18;
   } else if (x >= 150 && x <= 200){
     return 8;
-  } else if (x >= 200 && x <= 230){
+  } else if (x >= 200 && x <= 240){
     return 10;
   } else if (x >= 300 && x <= 310){
     return 9;
@@ -25,7 +25,7 @@
     return 3;
   } else if (x >= 522 && x <= 560){
     return 5;
-  } else if (x === 535 || x === 693 || x === 850){
+  } else if (x === 535 || x >= 690 && x<=693 || x >= 850 && x<=853){
     return 14;
   } else if (x >= 600 && x <= 650){
     return 13;
@@ -33,7 +33,7 @@
     return 12;
   } else if (x === 707 || x === 773 || x === 774 || x >= 700 && x <= 746){
     return 1;
-  } else if (x >= 747 && x <= 770){
+  } else if (x >= 747 && x <= 780){
     return 12;
   } else if (x >= 800 && x <= 830){
     return 16;

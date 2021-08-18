@@ -22,13 +22,6 @@ const ArtCard = ({
 	const [loadStyle, setStyle] = useState(styles.loadingImg); 
 	const [loaded, setLoaded] = useState(false);
 
-	const returnTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    })
-  }
-
 	return (
 		<div className={styles.container}>
 			<div className={styles.frame}> 
@@ -38,7 +31,7 @@ const ArtCard = ({
 					</div>
 				</div>
 			</div>
-			<div className={styles.card} onClick={() => {returnTop(); handleHover(location);}}>
+			<div className={styles.card} onClick={() => {handleHover(location);}}>
 				{isHighlight && <i class="bi bi-bookmark-star"></i>}
 				
 				<h2>{artistDisplayName}</h2>

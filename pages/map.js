@@ -1,102 +1,193 @@
 import Image from 'next/image';
 import styles from './styles/Map.module.css'
+import Navbar from '../components/navbar'
 
 const Map = (galleryNum) => {
-  galleryNum = 8;
+  galleryNum = 12;
   let gallery = `gallery${galleryNum}`;
 
   return(
     <div>
-      <Image src="/map1.svg" alt="1F" height={590} width={884} quality={100} layout={"responsive"}/>
-      <img src={`/1F/Gallery${galleryNum}.png`} className={`${styles.overlay} ${gallery}`}/>
-      
-      {/* <img src='/1F/Gallery0-9.png' className={`${styles.overlay} ${gallery}`}/> */}
+      <Navbar />
 
-      {/* <Image src="/map2.svg" alt="2F" height={590} width={884} quality={100}/>
-
-      <Image src="/map1m.svg" alt="1mF" height={590} width={884} quality={100}/> */}
+      <div className="mapContainer">
+        <Image src="/map1.svg" alt="1F" height={800} width={1199} quality={100} layout={"intrinsic"}/>
+        <Image src="/map2.svg" alt="2F" height={800} width={1199} quality={100} layout={"intrinsic"}/>
+        <img src={`/Gallery/Gallery${galleryNum}.png`} className={`${styles.overlay} ${gallery}`}/>
+      </div>
 
       <style jsx>{`
+      .mapContainer {
+        position: fixed;
+        width: var(--mapWidth);
+        margin-left: 5rem;
+      }
+
       .gallery0{
-        top: 51%;
-        right: 0.15%;
-        width: 43.4%;
-        transform: translate(0, var(--moveTop));
+        top: var(--moveTop);
+        right: var(--moveRight);
+        width: var(--partWidth);
       }
 
       .gallery1{
-        top: 10.8%;
-        right: 4%;
-        width: 29.5%;
-        transform: translate(0, calc(var(--moveTop) + 4%));
+        top: calc(var(--moveTop) - 15.25%);
+        right: calc(var(--moveRight) + 3.75%);
+        width: calc(var(--partWidth) - 14.5%);
       }
 
       .gallery2{
-        top: 53%;
-        right: 17%;
-        width: 17%;
-        transform: translate(0, calc(var(--moveTop) - 11.5%));
+        top: calc(var(--moveTop) + 1%);
+        right: calc(var(--moveRight) + 17%);
+        width: calc(var(--partWidth) - 27%);
       }
 
       .gallery3{
-        top: 25.5%;
-        right: 33%;
-        width: 23%;
-        transform: translate(0, calc(var(--moveTop) + 1.5%));
+        top: calc(var(--moveTop) - 9.75%);
+        right: calc(var(--moveRight) + 33%);
+        width: calc(var(--partWidth) - 21%);
       }
 
       .gallery4{
-        top: -0.75%;
-        right: 39.95%;
-        width: 20.7%;
-        transform: translate(0, calc(var(--moveTop) + 6.5%));
+        top: calc(var(--moveTop) - 23%);
+        right: calc(var(--moveRight) + 39.5%);
+        width: calc(var(--partWidth) - 23%);
       }
 
       .gallery5{
-        top: 24%;
-        left: 20.6%;
-        width: 26.5%;
-        transform: translate(0, calc(var(--moveTop) + 4.2%));
+        top: calc(var(--moveTop) - 10%);
+        left: calc(var(--moveRight) + 20.5%);
+        width: calc(var(--partWidth) - 17.75%);
       }
 
       .gallery6{
-        top: 11.75%;
-        left: 3.25%;
-        width: 18.45%;
-        transform: translate(0, calc(var(--moveTop) + 4.2%));
+        top: calc(var(--moveTop) - 15%);
+        left: calc(var(--moveRight) + 3%);
+        width: calc(var(--partWidth) - 25.5%);
       }
 
       .gallery7{
-        top: 51%;
-        left: 0.3%;
-        width: 21%;
-        transform: translate(0, calc(var(--moveTop) - 4.2%));
+        top: var(--moveTop);
+        left: calc(var(--moveRight) - 0.5%);
+        width: calc(var(--partWidth) - 22.75%);
       }
 
       .gallery8{
-        top: 71.5%;
-        left: 0%;
-        width: 40%;
-        transform: translate(0, calc(var(--moveTop) - 7.5%));
+        top: calc(var(--moveTop) + 8%);
+        left: calc(var(--moveRight) - 0.5%);
+        width: calc(var(--partWidth) - 3%);
       }
 
       .gallery9{
-        top: 37%;
-        left: 44.6%;
-        width: 10.5%;
-        transform: translate(0, var(--moveTop));
+        top: calc(var(--moveTop) - 5%);
+        left: calc(var(--moveRight) + 44.5%);
+        width: calc(var(--partWidth) - 33.5%); 
       }
 
-      @media (max-width: 2560px) {
-        --moveTop: -6.5%;
+      .gallery10{
+        bottom: var(--moveBottom);
+        right: var(--moveRight);
+        width: calc(var(--partWidth) + 17%);
       }
 
-      @media (min-width: 3000px) {
-        --moveTop: 15%;
+      .gallery11{
+        bottom: calc(var(--moveBottom) + 18.25%);
+        right: calc(var(--moveRight) + 16.75%);
+        width: calc(var(--partWidth) - 26.5%);
       }
 
-          
-        `}</style>
+      .gallery12{
+        bottom: calc(var(--moveBottom) + 25.25%);
+        right: calc(var(--moveRight) + 4.3%);
+        width: calc(var(--partWidth) - 26.5%);
+      }
+
+      .gallery13{
+        bottom: calc(var(--moveBottom) + 18.25%);
+        right: calc(var(--moveRight) + 33%);
+        width: calc(var(--partWidth) - 9.5%);
+      }
+
+      .gallery14{
+        bottom: calc(var(--moveBottom) + 11.25%);
+        left: calc(var(--moveRight) + 20%);
+        width: calc(var(--partWidth) - 16.75%);
+      }
+
+      .gallery15{
+        bottom: calc(var(--moveBottom) + 20%);
+        left: calc(var(--moveRight) + 3%);
+        width: calc(var(--partWidth) - 16.75%);
+      }
+
+      .gallery16{
+        bottom: calc(var(--moveBottom) + 11%);
+        left: calc(var(--moveRight) + 2%);
+        width: calc(var(--partWidth) - 26%);
+      }
+
+      .gallery17{
+        bottom: var(--moveBottom);
+        left: var(--moveRight);
+        width: calc(var(--partWidth) - 22.5%);
+      }
+
+      .gallery18{
+        bottom: calc(var(--moveBottom) + 5.75%);
+        left: calc(var(--moveRight) + 17%);
+        width: calc(var(--partWidth) - 30%);
+      }
+
+      .gallery19{
+        bottom: calc(var(--moveBottom) + 3%);
+        left: calc(var(--moveRight) + 20%);
+        width: calc(var(--partWidth) - 24%);
+      }
+
+      /** desktop with bookmark bar */
+      @media (min-height: 200px) {
+        --moveTop: 19.5%;
+        --mapWidth: 41%;
+        --partWidth: 44%;
+        --moveRight: 0.15%;
+        --moveBottom: 3.65%;
+      }
+
+      /** desktop without bookmark bar */
+      @media (min-height: 820px) {
+        --moveTop: 19.5%;
+        --mapWidth: 42.5%;
+        --partWidth: 44%;
+        --moveRight: 0.15%;
+        --moveBottom: 3.65%;
+      }
+
+      /** monitor screen with bookmark bar*/
+      @media (min-height: 900px) {
+        --moveTop: 19.5%;
+        --mapWidth: 37.5%;
+        --partWidth: 44%;
+        --moveRight: 0.15%;
+        --moveBottom: 3.65%;
+      }
+
+      /** monitor screen without bookmar bar*/
+      @media (min-height: 1000px) {
+        --moveTop: 19.5%;
+        --mapWidth: 39%;
+        --partWidth: 44%;
+        --moveRight: 0.15%;
+        --moveBottom: 3.65%;
+      }
+      
+     
+      `}</style>
+
+    <style jsx global>{`
+			@import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600&display=swap');
+			@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
+
+		`}</style>
+
     </div>
   )
 

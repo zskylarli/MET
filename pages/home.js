@@ -10,15 +10,18 @@ import home from '../public/loader.json';
 import notfound from '../public/notfound.json';
 import { sortLocation } from '../actions/sortLocation.js';
 import Link from 'next/link';
+import Footsteps from '../components/footsteps';
+import Navbar from '../components/navbar';
 
 const ArtworkTab = () => {
 	const router = useRouter();
 	const [artworkList, setArtworkList] = useState([]);
 	const [loading, setLoader] = useState(true);
-	const [galleryNum, setHover] = useState('0-9');
+	const [galleryNum, setHover] = useState('0');
 	const [copied, setCopy] = useState(false);
 	const [suggest, setSuggest] = useState(false);
 	const [empty, setEmpty] = useState(false);
+	const [numberWorks, setNumber] = useState(0);
 
 	const fetchDefault = async () => {
 		const date = await getObjectByTimeRange(router.query.begin, router.query.end, router.query.keyword);
@@ -26,7 +29,6 @@ const ArtworkTab = () => {
 		const medium = await getObjectByMedium(router.query.keyword, router.query.query);
 		const geolocation = await getObjectByGeolocation(router.query.keyword, router.query.query);
 		const resArray = [culture, medium, geolocation, date];
-		console.log(resArray);
 		
 		let res;
 		const max = Math.max(culture.total, medium.total, geolocation.total, date.total);
@@ -52,6 +54,7 @@ const ArtworkTab = () => {
 		let limit,n,p;
 		let numbers = [];
 		let maxView = Math.floor(router.query.time * 12);
+
 		if(res !== null ){
 			if(res.total > maxView){
 				limit = maxView;
@@ -67,9 +70,11 @@ const ArtworkTab = () => {
 				}	
 			} else{
 				limit = res.total;
-				numbers = range(0, limit);
+				numbers=[];let j=0; while(numbers.push(j++) <limit);
 			}
 		}
+
+		setNumber(limit);
 
 		const newArtworks = Array(limit);
 		const promiseArray = Array(limit);
@@ -118,8 +123,7 @@ const ArtworkTab = () => {
 		};
 	}
 
-	//remove when 2F map is added
-	if(galleryNum >= 10){
+	if(galleryNum >= 20){
 		setHover(0);
 	}
 	let gallery = `gallery${galleryNum}`;
@@ -158,6 +162,21 @@ const ArtworkTab = () => {
 		</div>
 	));
 
+	// var N = Math.ceil(numberWorks/6); 
+  // const items = Array.apply(null, {length: N}).map(Number.call, Number);
+
+	// let itemList=[];
+	// items.forEach((item)=>{
+  // 	itemList.push( <div className="container"><Footsteps key={item}/></div>)
+	// })
+
+	const returnTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
+
 	useEffect(() => {
     fetchDefault();
 		setTimeout(() => {
@@ -173,15 +192,22 @@ const ArtworkTab = () => {
 		 		</div>
 			)}
 
-			{!empty && <div>
-			<Image src="/map1.svg" alt="1F" height={590} width={884} quality={100} layout={"responsive"}/>
-			<img src={`/1F/Gallery${galleryNum}.png`} className={`${styles.overlay} ${gallery}`}/>
-		
-				<button type="button" className="btn btn-primary" onClick={() => copyCodeToClipboard()}>
-				{!copied && <div><i className="bi bi-clipboard"></i>  Share This Itinerary</div>}
-				{copied && <div><i className="bi bi-clipboard-check"></i>  Copied! </div>}
+			<Navbar handleClick = {copyCodeToClipboard}/>
+
+			{!empty && (
+			<div className="mapContainer">
+        <Image src="/map1.svg" alt="1F" height={800} width={1199} quality={100} layout={"intrinsic"}/>
+        <Image src="/map2.svg" alt="2F" height={800} width={1199} quality={100} layout={"intrinsic"}/>
+        <img src={`/Gallery/Gallery${galleryNum}.png`} className={`${styles.overlay} ${gallery}`}/>
+			</div>
+			)}
+			
+			{copied && (<div>
+				<button type="button" className="btn btn-primary">
+					<i className="bi bi-clipboard-check"></i> 
+					Copied! 
 				</button>
-			</div>}
+			</div>)}
 
 			{suggest && <div className="suggestionBox">
 				<h3>Did you mean to search by a different criteria?</h3>
@@ -195,14 +221,61 @@ const ArtworkTab = () => {
 			</div>}
 
 			{!empty && <div>
+				<Footsteps/>
+
 				{artworkTiles(artworkList)}
+				{/* {itemList} */}
 			</div>}
+
+			<i className="bi bi-arrow-bar-up" onClick={() => {returnTop();}}></i>
+
 
 			<style jsx>{`
 				span {
 					textDecoration: none;
 					cursor: pointer;
 				}
+
+				.container {
+					position: relative;
+				}
+
+				.bi-arrow-bar-up {
+					position: fixed;
+					right: 3%;
+					bottom: 1.5%; 
+					font-size: 3rem;
+					cursor: pointer;
+				}
+
+				.bi-arrow-bar-up:hover{
+					color: #E4022B;
+				}
+
+				.btn-primary {
+					z-index: 20;
+					animation: slide-in-anim 1.5s ease-out forwards;
+				}
+
+				@keyframes slide-in-anim {
+					0% {
+						opacity: 0;
+					}
+					25% {
+						transform: translateX(-2.5%);
+					}
+					50% {
+						opacity: 1;
+						transform: translateX(-5%);
+					}
+					75% {
+						transform: translateX(-2.5%);
+					}
+					100% {
+						opacity: 0;
+						transform: translateX(-0%);
+					}
+				}				
 
 				.suggestionBox {
 					display: inline-flex;
@@ -225,88 +298,167 @@ const ArtworkTab = () => {
 				}
 
 				.gallery0-9{
-					top: 6.25%;
-					left: -0.2%;
-					width: 100%;
-					transform: translate(0, var(--moveTop));
+					display: none;
 				}
-
+	
 				.gallery0{
-					top: 51%;
-					right: 0.15%;
-					width: 43.4%;
-					transform: translate(0, var(--moveTop));
+					top: var(--moveTop);
+					right: var(--moveRight);
+					width: var(--partWidth);
 				}
 	
 				.gallery1{
-					top: 10.8%;
-					right: 4%;
-					width: 29.5%;
-					transform: translate(0, calc(var(--moveTop) + 4%));
+					top: calc(var(--moveTop) - 15.25%);
+					right: calc(var(--moveRight) + 3.75%);
+					width: calc(var(--partWidth) - 14.5%);
 				}
 	
 				.gallery2{
-					top: 53%;
-					right: 17%;
-					width: 17%;
-					transform: translate(0, calc(var(--moveTop) - 11.5%));
+					top: calc(var(--moveTop) + 1%);
+					right: calc(var(--moveRight) + 17%);
+					width: calc(var(--partWidth) - 27%);
 				}
 	
 				.gallery3{
-					top: 25.5%;
-					right: 33%;
-					width: 23%;
-					transform: translate(0, calc(var(--moveTop) + 1.5%));
+					top: calc(var(--moveTop) - 9.75%);
+					right: calc(var(--moveRight) + 33%);
+					width: calc(var(--partWidth) - 21%);
 				}
 	
 				.gallery4{
-					top: -0.75%;
-					right: 39.95%;
-					width: 20.7%;
-					transform: translate(0, calc(var(--moveTop) + 6.5%));
+					top: calc(var(--moveTop) - 23%);
+					right: calc(var(--moveRight) + 39.5%);
+					width: calc(var(--partWidth) - 23%);
 				}
 	
 				.gallery5{
-					top: 24%;
-					left: 20.6%;
-					width: 26.5%;
-					transform: translate(0, calc(var(--moveTop) + 4.2%));
+					top: calc(var(--moveTop) - 10%);
+					left: calc(var(--moveRight) + 20.5%);
+					width: calc(var(--partWidth) - 17.75%);
 				}
 	
 				.gallery6{
-					top: 11.75%;
-					left: 3.25%;
-					width: 18.45%;
-					transform: translate(0, calc(var(--moveTop) + 4.2%));
+					top: calc(var(--moveTop) - 15%);
+					left: calc(var(--moveRight) + 3%);
+					width: calc(var(--partWidth) - 25.5%);
 				}
 	
 				.gallery7{
-					top: 51%;
-					left: 0.3%;
-					width: 21%;
-					transform: translate(0, calc(var(--moveTop) - 4.2%));
+					top: var(--moveTop);
+					left: calc(var(--moveRight) - 0.5%);
+					width: calc(var(--partWidth) - 22.75%);
 				}
 	
 				.gallery8{
-					top: 71.5%;
-					left: 0%;
-					width: 40%;
-					transform: translate(0, calc(var(--moveTop) - 7.5%));
+					top: calc(var(--moveTop) + 8%);
+					left: calc(var(--moveRight) - 0.5%);
+					width: calc(var(--partWidth) - 3%);
 				}
 	
 				.gallery9{
-					top: 37%;
-					left: 44.6%;
-					width: 10.5%;
-					transform: translate(0, var(--moveTop));
+					top: calc(var(--moveTop) - 5%);
+					left: calc(var(--moveRight) + 44.5%);
+					width: calc(var(--partWidth) - 33.5%); 
 				}
 	
-				@media (max-width: 2600px) {
-					--moveTop: -6%;
+				.gallery10{
+					bottom: var(--moveBottom);
+					right: var(--moveRight);
+					width: calc(var(--partWidth) + 17%);
 				}
 	
-				@media (min-width: 3000px) {
-					--moveTop: 15%;
+				.gallery11{
+					bottom: calc(var(--moveBottom) + 18.25%);
+					right: calc(var(--moveRight) + 16.75%);
+					width: calc(var(--partWidth) - 26.5%);
+				}
+	
+				.gallery12{
+					bottom: calc(var(--moveBottom) + 25.25%);
+					right: calc(var(--moveRight) + 4.3%);
+					width: calc(var(--partWidth) - 26.5%);
+				}
+	
+				.gallery13{
+					bottom: calc(var(--moveBottom) + 18.25%);
+					right: calc(var(--moveRight) + 33%);
+					width: calc(var(--partWidth) - 9.5%);
+				}
+	
+				.gallery14{
+					bottom: calc(var(--moveBottom) + 11.25%);
+					left: calc(var(--moveRight) + 20%);
+					width: calc(var(--partWidth) - 16.75%);
+				}
+	
+				.gallery15{
+					bottom: calc(var(--moveBottom) + 20%);
+					left: calc(var(--moveRight) + 3%);
+					width: calc(var(--partWidth) - 16.75%);
+				}
+	
+				.gallery16{
+					bottom: calc(var(--moveBottom) + 11%);
+					left: calc(var(--moveRight) + 2%);
+					width: calc(var(--partWidth) - 26%);
+				}
+	
+				.gallery17{
+					bottom: var(--moveBottom);
+					left: var(--moveRight);
+					width: calc(var(--partWidth) - 22.5%);
+				}
+	
+				.gallery18{
+					bottom: calc(var(--moveBottom) + 5.75%);
+					left: calc(var(--moveRight) + 17%);
+					width: calc(var(--partWidth) - 30%);
+				}
+	
+				.gallery19{
+					bottom: calc(var(--moveBottom) + 3%);
+					left: calc(var(--moveRight) + 20%);
+					width: calc(var(--partWidth) - 24%);
+				}
+
+				.mapContainer {
+					margin-left: 6.5%;
+					margin-top: 1%;
+					--mapWidth: 39%;
+					position: fixed;
+					width: var(--mapWidth);
+					--moveTop: 19.5%;
+					--partWidth: 44%;
+					--moveRight: 0.15%;
+					--moveBottom: 3.65%;
+					z-index: 5;
+				}
+	
+				/** desktop without bookmark bar */
+				@media (min-height: 820px) {
+					--moveTop: 19.5%;
+					--mapWidth: 42.5%;
+					--partWidth: 44%;
+					--moveRight: 0.15%;
+					--moveBottom: 3.65%;
+				}
+	
+				/** monitor screen with bookmark bar*/
+				@media (min-height: 900px) {
+					--moveTop: 19.5%;
+					--mapWidth: 37.5%;
+					--partWidth: 44%;
+					--moveRight: 0.15%;
+					--moveBottom: 3.65%;
+				}
+	
+				/** monitor screen without bookmar bar*/
+				@media (min-height: 1000px) {
+					--moveTop: 19.5%;
+					--mapWidth: 39%;
+					--partWidth: 44%;
+					--moveRight: 0.15%;
+					--moveBottom: 3.65%;
 				}
           
         `}</style>
@@ -328,6 +480,7 @@ const ArtworkTab = () => {
 			* {
 				box-sizing: border-box;
 			}
+
 		`}</style>
 		</div>
 	)
