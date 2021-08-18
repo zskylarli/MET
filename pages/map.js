@@ -9,7 +9,7 @@ const Map = (galleryNum) => {
   return(
     <div>
       <Navbar />
-
+      <img src="/metbg.png" alt="background" className="backgroundImg"/>
       <div className="mapContainer">
         <Image src="/map1.svg" alt="1F" height={800} width={1199} quality={100} layout={"intrinsic"}/>
         <Image src="/map2.svg" alt="2F" height={800} width={1199} quality={100} layout={"intrinsic"}/>
@@ -21,6 +21,15 @@ const Map = (galleryNum) => {
         position: fixed;
         width: var(--mapWidth);
         margin-left: 5rem;
+      }
+
+      .backgroundImg {
+        position: fixed;
+        height: 100vh;
+        width: 50vw;
+        object: cover;
+        margin-left: 0;
+        filter: blur(5px);
       }
 
       .gallery0{
