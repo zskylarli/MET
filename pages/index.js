@@ -1,9 +1,6 @@
-// import Layout from '../components/layout'
-// import NestedLayout from '../components/nested-layout'
 import React from 'react';
 import SearchForm from '../components/search';
 import Slideshow from '../components/slideshow';
-import Image from 'next/image';
 
 export default function Page() {
 

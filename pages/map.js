@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import styles from './styles/Map.module.css';
 import Navbar from '../components/navbar';
-import SNS from '../components/sns'
 
 const Map = (galleryNum) => {
   galleryNum = 12;
@@ -10,7 +9,6 @@ const Map = (galleryNum) => {
   return(
     <div>
       <Navbar />
-      <SNS />
       <img src="/metbg.png" alt="background" className="backgroundImg"/>
       <div className="mapContainer">
         <Image src="/map1.svg" alt="1F" height={800} width={1199} quality={100} layout={"intrinsic"}/>
