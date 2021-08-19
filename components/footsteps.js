@@ -26,6 +26,30 @@ const Footsteps = () => {
     20:'/footsteps/footstep21.png',
   }
 
+  const footstepImages2 = [
+    '/footsteps/footstep1.png',
+    '/footsteps/footstep2.png',
+    '/footsteps/footstep3.png',
+    '/footsteps/footstep4.png',
+    '/footsteps/footstep5.png',
+    '/footsteps/footstep6.png',
+    '/footsteps/footstep7.png',
+    '/footsteps/footstep8.png',
+    '/footsteps/footstep9.png',
+    '/footsteps/footstep10.png',
+    '/footsteps/footstep11.png',
+    '/footsteps/footstep12.png',
+    '/footsteps/footstep13.png',
+    '/footsteps/footstep14.png',
+    '/footsteps/footstep15.png',
+    '/footsteps/footstep16.png',
+    '/footsteps/footstep17.png',
+    '/footsteps/footstep18.png',
+    '/footsteps/footstep19.png',
+    '/footsteps/footstep20.png',
+    '/footsteps/footstep21.png',
+  ]
+
   const[imageToUse, setImage] = useState('/footsteps/footstep23.png');
 
   // Global variable to control the scrolling behavior
@@ -51,7 +75,12 @@ const Footsteps = () => {
   }
 
   useEffect(() => {
-    window.addEventListener('scroll', trackScrollPosition, { passive: true })
+    window.addEventListener('scroll', trackScrollPosition, { passive: true });
+    footstepImages2.forEach((image) => {
+      const newImage = new Image();
+      newImage.src = image;
+      window[image] = newImage;
+    });
   })
 
   return (
