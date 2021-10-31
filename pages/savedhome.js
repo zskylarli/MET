@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router'
-import { getObjectById, getObjectByArtistCulture, getObjectByGeolocation, getObjectByMedium, getObjectByTimeRange } from '../actions/getInfo.js';
-import { saveTrip } from '../actions/tripActions.js';
+import { getObjectById } from '../actions/getInfo.js';
+import { getTrip } from '../actions/tripActions.js';
 import ArtCard from '../components/artCard';
 import styles from './styles/Home.module.css';
 import { makeMessage } from '../actions/copy.js';
 import LottieAnimation from '../actions/Lottie';
 import home from '../public/loader.json';
-import notfound from '../public/notfound.json';
 import { sortLocation } from '../actions/sortLocation.js';
 import Link from 'next/link';
 import Navbar from '../components/navbar';
-import { setMaxListeners } from '../met.js';
 
 const ArtworkTab = () => {
 	const router = useRouter();
@@ -20,78 +18,26 @@ const ArtworkTab = () => {
 	const [loading, setLoader] = useState(true);
 	const [galleryNum, setHover] = useState('0');
 	const [copied, setCopy] = useState(false);
-	const [suggest, setSuggest] = useState(false);
-	const [empty, setEmpty] = useState(false);
-	const [resEdited, setObjectIDs] = useState([]);
+	const [key, setKey] = useState('');
 
 	const fetchDefault = async () => {
-		const date = await getObjectByTimeRange(router.query.begin, router.query.end, router.query.keyword);
-		const culture = await getObjectByArtistCulture(router.query.keyword);
-		const medium = await getObjectByMedium(router.query.keyword, router.query.query);
-		const geolocation = await getObjectByGeolocation(router.query.keyword, router.query.query);
-		const resArray = [culture, medium, geolocation, date];
-		
-		let res;
-		const max = Math.max(culture.total, medium.total, geolocation.total, date.total);
-
-		if (router.query.theme === "artistculture" && culture.total !== 0) {
-			res = culture;
-		} else if (router.query.theme === "medium" && medium.total !== 0) {
-			res = medium;
-		} else if (router.query.theme === "geolocation" && geolocation.total !== 0) {
-			res = geolocation;
-		} else if (router.query.theme === "period" && date.total !== 0) {
-			res = date;
-		} else if (max === 0) {
-			setEmpty(true);	
-			res = null;
-		}	else {
-			const maxRes = resArray.find( (res) => res.total === max );
-			res = maxRes;
-			setSuggest(true);
-		}
-
-		//generate random numbers to index artworks for large res
-		let limit,n,p;
-		let numbers = [];
-		let maxView = Math.floor(router.query.time * 12);
-
-		if(res !== null ){
-			if(res.total > maxView){
-				limit = maxView;
-				for (let i = 0; i < maxView; i++) {
-					do {
-						n = Math.floor(Math.random() * (res.total+ 1));
-						p = numbers.includes(n);
-						if(!p){
-							numbers.push(n);
-						}
-					}
-					while(p);
-				}	
-			} else{
-				limit = res.total;
-				numbers=[];let j=0; while(numbers.push(j++) <limit);
-			}
-		}
+		const res = await getTrip(router.query.key);
+    console.log(res);
+    const limit = res.artworks.length;
 
 		const newArtworks = Array(limit);
-		const objectIds = Array(limit);
 		const promiseArray = Array(limit);
 
 		if (res !== null){
 			for (let i = 0; i < limit; i += 1) {
-				promiseArray[i] = getObjectById(res.objectIDs[numbers[i]]);
+				promiseArray[i] = getObjectById(res.artworks[i].objectId);
 			}
 
 			Promise.all(promiseArray).then((values) => {
 				values.forEach((artwork, i) => {
 					let location = sortLocation(artwork.GalleryNumber);
-					objectIds[i] = {
-						objectId: res.objectIDs[i],
-					}
 					newArtworks[i] = {
-						objectId: res.objectIDs[i],
+						objectId: res.artworks[i].objectId,
 						objectName: artwork.objectName || "",
 						title: artwork.title || "",
 						primaryImage: artwork.primaryImage || "",
@@ -112,16 +58,7 @@ const ArtworkTab = () => {
 					};
 				});
 	
-				newArtworks.sort(function(a, b) {
-					var keyA = a.location,
-						keyB = b.location;
-					if (keyA < keyB) return -1;
-					if (keyA > keyB) return 1;
-					return 0;
-				});
-	
 				setArtworkList(newArtworks);
-				setObjectIDs(objectIds);
 			})
 
 		};
@@ -133,18 +70,7 @@ const ArtworkTab = () => {
 	let gallery = `gallery${galleryNum}`;
 
 	const generateTripKey = async () => {
-		const trip = await saveTrip(resEdited);
-		
-		const el = document.createElement('textarea');
-		el.value = trip.key;
-		document.body.appendChild(el);
-		el.select();
-		document.execCommand('copy');
-		document.body.removeChild(el);
-
-		//modified
-		setCopy(false);
-		setCopy(true);
+		console.log("bug");
 	}
 
 	const copyCodeToClipboard = () => {
@@ -208,17 +134,14 @@ const ArtworkTab = () => {
 
 			<Navbar handleClick = {copyCodeToClipboard} handleSave = {generateTripKey}/>
 
-			{!empty && (<div>
+			<div>
 			<img src="/metbg.png" alt="background" className="backgroundImg"/>
 			<div className="mapContainer">
-				<span>1F</span>
         <Image src="/map1.svg" priority={true} alt="1F" height={800} width={1199} quality={100} layout={"intrinsic"} />
-				<span>2F</span>
         <Image src="/map2.svg" priority={true} alt="2F" height={800} width={1199} quality={100} layout={"intrinsic"}/>
         <img src={`/Gallery/Gallery${galleryNum}.png`} className={`${styles.overlay} ${gallery}`}/>
 			</div>
 			</div>
-			)}
 			
 			{copied && (<div>
 				<button type="button" className="btn btn-primary">
@@ -227,22 +150,9 @@ const ArtworkTab = () => {
 				</button>
 			</div>)}
 
-			{suggest && <div className="suggestionBox">
-				<h3>Did you mean to search by a different criteria?</h3>
-				<br></br>
-				<p>Showing alternative results...</p>
-			</div>}
-
-			{empty && <div className={styles.notFoundBox}>
-					<LottieAnimation lotti={notfound} height={500} width={500} />
-				<h3>Maybe for a trip to another museum...plan <Link href='/'><span>a new trip?</span></Link></h3>
-			</div>}
-
-			{!empty && <div className="backgroundColor">
-				{/* <Footsteps/> */}
-
+			<div className="backgroundColor">
 				{artworkTiles(artworkList)}
-			</div>}
+			</div>
 
 			<i className="bi bi-arrow-bar-up" onClick={() => {returnTop();}}></i>
 
@@ -255,8 +165,7 @@ const ArtworkTab = () => {
 				.backgroundColor {
 					background-color: #2D3B42;
 					width: 100%;
-					height: 100%;
-					padding-bottom: 2.5%;
+					height: 120%;
 				}
 
 				.backgroundImg {
@@ -279,7 +188,7 @@ const ArtworkTab = () => {
 					bottom: 1.5%; 
 					font-size: 3rem;
 					cursor: pointer;
-					color: white;
+          color: white;
 				}
 
 				.bi-arrow-bar-up:hover{
@@ -457,7 +366,7 @@ const ArtworkTab = () => {
 
 				.mapContainer {
 					margin-left: 7.75%;
-					margin-top: 1%;
+					margin-top: 0.5%;
 					--mapWidth: 36%;
 					position: fixed;
 					width: var(--mapWidth);
@@ -466,18 +375,6 @@ const ArtworkTab = () => {
 					--moveRight: 0.15%;
 					--moveBottom: 3.65%;
 					z-index: 5;
-				}
-
-				.mapContainer span {
-					position: absolute;
-					top: 52%;
-					left: 2%;
-					font-weight: 800;
-					z-index: 10;
-				}
-
-				.mapContainer span:first-child {
-					top: 2%;
 				}
 	
 				/** desktop without bookmark bar */

@@ -8,7 +8,7 @@ import {
   TwitterIcon,
 } from "react-share";
 
-const Navbar = ({handleClick = () => {}}) => {
+const Navbar = ({handleClick = () => {}, handleSave = () => {}}) => {
   const [snsClicked, setSNS] = useState();
   const shareUrl = "https://met-zskylarli.vercel.app/";
 
@@ -23,8 +23,9 @@ const Navbar = ({handleClick = () => {}}) => {
     <div>
       <div className="nav flex-column">
         <a className="nav-link" href="/"><i className="bi bi-house"></i></a>
-        <a className="nav-link" href="#"><i className="bi bi-share"onClick={() => {setSNS(!snsClicked);}}></i></a>
         <a className="nav-link" href="#"><i className="bi bi-clipboard" onClick={() => {handleClick();}}></i></a>
+        <a className="nav-link" href="#"><i className="bi bi-key" onClick={() => {handleSave();}}></i></a>
+        <a className="nav-link" href="#"><i className="bi bi-share" onClick={() => {setSNS(!snsClicked);}}></i></a>
         <a className="nav-link" href="https://maps.metmuseum.org/"><i className="bi bi-map"></i></a>
       </div>
 
@@ -78,9 +79,9 @@ const Navbar = ({handleClick = () => {}}) => {
         font-size: 2rem;
       }
       .appearPie {
-        position: absolute;
-        top: calc(36% - 3rem);
-        left: -4rem;
+        position: fixed;
+        top: calc(36% - 1rem);
+        left: -5rem;
         margin: 0;
         padding: 0;
         width: 15em;
@@ -127,7 +128,7 @@ const Navbar = ({handleClick = () => {}}) => {
       }	
       .slice {
         overflow: hidden;
-        position: absolute;
+        position: fixed;
         top: 0;
         right: 0;
         width: 50%;
@@ -150,7 +151,7 @@ const Navbar = ({handleClick = () => {}}) => {
       }
   
       .slice-contents {
-        position: absolute;
+        position: fixed;
         left: -100%;
         width: 200%;
         height: 200%;

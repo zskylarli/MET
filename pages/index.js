@@ -1,6 +1,7 @@
 import React from 'react';
 import SearchForm from '../components/search';
 import Slideshow from '../components/slideshow';
+import KeyInput from '../components/keyInput';
 
 export default function Page() {
 
@@ -12,6 +13,8 @@ export default function Page() {
       <Slideshow />
 
 			<SearchForm />
+
+      <KeyInput />
 
       <style jsx>{`
       .logoContainer {

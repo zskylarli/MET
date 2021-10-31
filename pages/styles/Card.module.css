@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   max-width: 45vw;
-  margin-top: 2%;
+  padding-top: 7.5%;
   left: 50%;
   transform: translate(-50%, 0);
   z-index: 15;

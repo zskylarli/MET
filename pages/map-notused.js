@@ -11,20 +11,20 @@ const Map = (galleryNum) => {
       <Navbar />
       <img src="/metbg.png" alt="background" className="backgroundImg"/>
       <div className="mapContainer">
-        <Image src="/map1.svg" alt="1F" height={800} width={1199} quality={100} layout={"intrinsic"}/>
+        <Image src="/map1.svg" alt="1F" height={800} width={1199} quality={100} layout={"responsive"}/>
         <Image src="/map2.svg" alt="2F" height={800} width={1199} quality={100} layout={"intrinsic"}/>
         <img src={`/Gallery/Gallery${galleryNum}.png`} className={`${styles.overlay} ${gallery}`}/>
       </div>
 
       <style jsx>{`
       .mapContainer {
-        position: fixed;
+        position: absolute;
         width: var(--mapWidth);
         margin-left: 5rem;
-      }
+      }s
 
       .backgroundImg {
-        position: fixed;
+        position: absolute;
         height: 100vh;
         width: 50vw;
         object: cover;
