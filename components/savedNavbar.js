@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -8,11 +8,10 @@ import {
   TwitterIcon,
 } from "react-share";
 
-const Navbar = ({handleClick = () => {}, handleSave = () => {}}) => {
+const SavedNavbar = ({handleClick = () => {}}) => {
   const [snsClicked, setSNS] = useState();
-  const shareKey = localStorage.getItem('currentKey');
-  const shareUrl = `https://met-zskylarli.vercel.app/savedhome?key=${shareKey}`;
-
+  let shareUrl = "https://met-zskylarli.vercel.app";
+  
   let animationClass;
   if (snsClicked){
     animationClass = "appearPie";
@@ -20,13 +19,16 @@ const Navbar = ({handleClick = () => {}, handleSave = () => {}}) => {
     animationClass = "disappearPie";
   }
 
+  useEffect(() => {
+    shareUrl = window.location;
+  })
+
   return (
     <div>
       <div className="nav flex-column">
         <a className="nav-link" href="/"><i className="bi bi-house"></i></a>
         <a className="nav-link" href="#"><i className="bi bi-clipboard" onClick={() => {handleClick();}}></i></a>
-        <a className="nav-link" href="#"><i className="bi bi-key" onClick={() => {handleSave();}}></i></a>
-        <a className="nav-link" href="#"><i className="bi bi-share" onClick={() => {handleSave(); setSNS(!snsClicked);}}></i></a>
+        <a className="nav-link" href="#"><i className="bi bi-share" onClick={() => {setSNS(!snsClicked);}}></i></a>
         <a className="nav-link" href="https://maps.metmuseum.org/" target="_blank" rel="noopener noreferrer"><i className="bi bi-map"></i></a>
       </div>
 
@@ -209,4 +211,4 @@ const Navbar = ({handleClick = () => {}, handleSave = () => {}}) => {
   )
 }
 
-export default Navbar;
+export default SavedNavbar;

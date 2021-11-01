@@ -40,8 +40,8 @@ const ArtCard = ({
 				<h3>{medium}, {dimensions}</h3>
 				<p>{creditLine}</p>
 
-				<Link href={objectURL} style={{ textDecoration: 'none' }}><i className="bi bi-bank"></i></Link>
-				<Link href={artistWikidata_URL} style={{ textDecoration: 'none' }}><i className="bi bi-search"></i></Link>
+				<a target="_blank" href={objectURL} style={{ textDecoration: 'none' }}><i className="bi bi-bank"></i></a>
+				<a target="_blank" href={artistWikidata_URL} style={{ textDecoration: 'none' }}><i className="bi bi-search"></i></a>
 			</div>
 		
 			<style jsx>{`

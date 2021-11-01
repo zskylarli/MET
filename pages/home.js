@@ -133,10 +133,14 @@ const ArtworkTab = () => {
 	let gallery = `gallery${galleryNum}`;
 
 	const generateTripKey = async () => {
-		const trip = await saveTrip(resEdited);
-		
+		if (localStorage.getItem('currentKey') === null) {
+			const trip = await saveTrip(resEdited);
+			localStorage.setItem('currentKey', trip.key);
+		} 
+
+		const shareKey = localStorage.getItem('currentKey');
 		const el = document.createElement('textarea');
-		el.value = trip.key;
+		el.value = shareKey;
 		document.body.appendChild(el);
 		el.select();
 		document.execCommand('copy');
@@ -316,8 +320,10 @@ const ArtworkTab = () => {
     			align-items: center;
     			justify-content: center;
 					flex-direction: column;
+					position: relative;
+					left: 50%;
+					width: 50%;
 					background-color: #E4022B;
-					width: 100%;
 					height: 20vh;
 					color: white;
 				}

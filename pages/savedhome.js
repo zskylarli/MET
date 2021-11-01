@@ -10,7 +10,7 @@ import LottieAnimation from '../actions/Lottie';
 import home from '../public/loader.json';
 import { sortLocation } from '../actions/sortLocation.js';
 import Link from 'next/link';
-import Navbar from '../components/navbar';
+import SavedNavbar from '../components/savedNavbar';
 
 const ArtworkTab = () => {
 	const router = useRouter();
@@ -18,10 +18,17 @@ const ArtworkTab = () => {
 	const [loading, setLoader] = useState(true);
 	const [galleryNum, setHover] = useState('0');
 	const [copied, setCopy] = useState(false);
-	const [key, setKey] = useState('');
 
+  let key;
 	const fetchDefault = async () => {
-		const res = await getTrip(router.query.key);
+    if(router.query.key == 'undefined'){
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      key = urlParams.get('key')
+    } else {
+      key = router.query.key;
+    }
+		const res = await getTrip(key);
     console.log(res);
     const limit = res.artworks.length;
 
@@ -132,12 +139,14 @@ const ArtworkTab = () => {
 		 		</div>
 			)}
 
-			<Navbar handleClick = {copyCodeToClipboard} handleSave = {generateTripKey}/>
+			<SavedNavbar handleClick = {copyCodeToClipboard}/>
 
 			<div>
 			<img src="/metbg.png" alt="background" className="backgroundImg"/>
 			<div className="mapContainer">
+        <span>1F</span>
         <Image src="/map1.svg" priority={true} alt="1F" height={800} width={1199} quality={100} layout={"intrinsic"} />
+        <span>2F</span>
         <Image src="/map2.svg" priority={true} alt="2F" height={800} width={1199} quality={100} layout={"intrinsic"}/>
         <img src={`/Gallery/Gallery${galleryNum}.png`} className={`${styles.overlay} ${gallery}`}/>
 			</div>
@@ -165,7 +174,8 @@ const ArtworkTab = () => {
 				.backgroundColor {
 					background-color: #2D3B42;
 					width: 100%;
-					height: 120%;
+					height: 100%;
+          padding-bottom: 2.5%;
 				}
 
 				.backgroundImg {
@@ -375,6 +385,18 @@ const ArtworkTab = () => {
 					--moveRight: 0.15%;
 					--moveBottom: 3.65%;
 					z-index: 5;
+				}
+
+        .mapContainer span {
+					position: absolute;
+					top: 52%;
+					left: 2%;
+					font-weight: 800;
+					z-index: 10;
+				}
+
+				.mapContainer span:first-child {
+					top: 2%;
 				}
 	
 				/** desktop without bookmark bar */
