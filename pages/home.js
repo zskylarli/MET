@@ -20,6 +20,7 @@ const ArtworkTab = () => {
 	const [loading, setLoader] = useState(true);
 	const [galleryNum, setHover] = useState('0');
 	const [copied, setCopy] = useState(false);
+	const [generated, setGenerated] = useState(false);
 	const [suggest, setSuggest] = useState(false);
 	const [empty, setEmpty] = useState(false);
 	const [resEdited, setObjectIDs] = useState([]);
@@ -147,8 +148,7 @@ const ArtworkTab = () => {
 		document.body.removeChild(el);
 
 		//modified
-		setCopy(false);
-		setCopy(true);
+		setGenerated(!generated);
 	}
 
 	const copyCodeToClipboard = () => {
@@ -160,9 +160,7 @@ const ArtworkTab = () => {
 		document.execCommand('copy');
 		document.body.removeChild(el);
 
-		//modified
-		setCopy(false);
-		setCopy(true);
+		setCopy(!copied);
   }
 
 	const artworkTiles = (list) => list.map((artwork) => (
@@ -228,6 +226,13 @@ const ArtworkTab = () => {
 				<button type="button" className="btn btn-primary">
 					<i className="bi bi-clipboard-check"></i> 
 					Copied! 
+				</button>
+			</div>)}
+
+			{generated && (<div>
+				<button type="button" className="btn btn-primary">
+					<i className="bi bi-clipboard-checks"></i> 
+					Key copied!
 				</button>
 			</div>)}
 

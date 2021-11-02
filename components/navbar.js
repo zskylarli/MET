@@ -15,17 +15,13 @@ const Navbar = ({handleClick = () => {}, handleSave = () => {}}) => {
   let animationClass;
   if (snsClicked){
     animationClass = "appearPie";
-  } else {
-    animationClass = "disappearPie";
-  }
-
-  useEffect(() => {
-    
     if (localStorage.getItem('currentKey') !== null) {
       const shareKey = localStorage.getItem('currentKey');
       shareUrl = `https://met-zskylarli.vercel.app/savedhome?key=${shareKey}`;
     } 
-  })
+  } else {
+    animationClass = "disappearPie";
+  }
 
   return (
     <div>
