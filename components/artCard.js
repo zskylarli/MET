@@ -34,17 +34,19 @@ const ArtCard = ({
 			<div className={styles.card} onClick={() => {handleHover(location);}}>
 				{isHighlight && <i class="bi bi-bookmark-star"></i>}
 				
+				<h4>Gallery {GalleryNumber}</h4>
 				<h2>{artistDisplayName}</h2>
 				<h3>{artistDisplayBio}</h3>
 				<h1><b>{title}</b> {period}</h1>
 				<h3>{medium}, {dimensions}</h3>
 				<p>{creditLine}</p>
-
+				
 				<a target="_blank" href={objectURL} style={{ textDecoration: 'none' }}><i className="bi bi-bank"></i></a>
 				<a target="_blank" href={artistWikidata_URL} style={{ textDecoration: 'none' }}><i className="bi bi-search"></i></a>
 			</div>
 		
 			<style jsx>{`
+
 			.bi-bank:hover{
 				color: #E4022B;
 				cursor:pointer;

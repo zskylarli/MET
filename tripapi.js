@@ -80,7 +80,7 @@ app.post('/save', (req,res) => {
   let newItem = new Catalogue({
       key: mongoose.Types.ObjectId(),
       artworks: req.body,
-      name: "fuckyou",
+      name: "_",
   });
 
   newItem.save()

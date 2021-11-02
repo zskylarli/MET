@@ -41,21 +41,21 @@ const SearchForm = () => {
       <label for="number"></label>
       <input type="text" placeholder="Duration of stay (hrs)" name="duration" id="duration_input" onInput={(e) => {setTime(e.target.value);}} />
     </div>
-    <div class="keyword">
-      <label for="keyword"></label>
-      <input type="text" placeholder="Plan my trip around..." id="name_input" onInput={(e) => {setKeyword(e.target.value);}} required/>
-    </div>
-
     <div class="subject">
       <label for="subject"></label>
       <select placeholder="Category" name="subject" id="subject_input" onChange={(e) => {toggleTheme(e.target.value); setTheme(e.target.value);}} required>
-        <option disabled hidden selected>Subject line</option>
+        <option disabled hidden selected>Filter by...</option>
         <option value="artistculture">Artist</option>
         <option value="artistculture">Culture</option>
         <option value="medium">Medium</option>
         <option value="geolocation">Geolocation</option>
         <option value="period">Time period</option>
       </select>
+    </div>
+
+    <div class="keyword">
+      <label for="keyword"></label>
+      <input type="text" placeholder="Plan my trip around..." id="name_input" onInput={(e) => {setKeyword(e.target.value);}} required/>
     </div>
 
     {display && theme !== "period" && (
