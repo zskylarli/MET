@@ -84,14 +84,15 @@ const ArtworkTab = () => {
 		if (res !== null){
 			for (let i = 0; i < limit; i += 1) {
 				promiseArray[i] = getObjectById(res.objectIDs[numbers[i]]);
+				objectIds[i] = {
+					objectId: res.objectIDs[numbers[i]],
+				}
 			}
+			setObjectIDs(objectIds);
 
 			Promise.all(promiseArray).then((values) => {
 				values.forEach((artwork, i) => {
 					let location = sortLocation(artwork.GalleryNumber);
-					objectIds[i] = {
-						objectId: res.objectIDs[i],
-					}
 					newArtworks[i] = {
 						objectId: res.objectIDs[i],
 						objectName: artwork.objectName || "",
@@ -123,9 +124,8 @@ const ArtworkTab = () => {
 				});
 	
 				setArtworkList(newArtworks);
-				setObjectIDs(objectIds);
 			})
-
+		
 		};
 	}
 
@@ -136,8 +136,6 @@ const ArtworkTab = () => {
 
 	const generateTripKey = async () => {
 		// if (localStorage.getItem('currentKey') === null) {
-		console.log(res);
-		console.log(resEdited);
 		const trip = await saveTrip(resEdited);
 		localStorage.setItem('currentKey', trip.key);
 

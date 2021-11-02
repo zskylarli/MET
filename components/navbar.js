@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -17,7 +17,7 @@ const Navbar = ({handleClick = () => {}, handleSave = () => {}}) => {
     animationClass = "appearPie";
     if (localStorage.getItem('currentKey') !== null) {
       const shareKey = localStorage.getItem('currentKey');
-      shareUrl = `https://met-zskylarli.vercel.app/savedhome?key=${shareKey}`;
+      shareUrl = `https://met-phi.vercel.app/savedhome?key=${shareKey}`;
     } 
   } else {
     animationClass = "disappearPie";
