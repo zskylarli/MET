@@ -94,7 +94,7 @@ const SearchForm = () => {
       }}
       as={`/${name}strip`}
     >
-      <button value="Send" id="form_button" onClick={handleClick}/>
+      <input value="Send" id="form_button" onClick={handleClick}/>
     </Link>
     </div>
   </form>
@@ -108,15 +108,11 @@ const SearchForm = () => {
       background: #F2F3EB;
     }
 
-    button {
-      overflow: visible;
-    }
-
-    button, select {
+    select {
       text-transform: none;
     }
 
-    button, input, select, textarea {
+    input, select, textarea {
       color: #5A5A5A;
       font: inherit;
       margin: 0;
