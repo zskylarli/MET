@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -10,13 +10,7 @@ import {
 
 const Navbar = ({handleClick = () => {}, handleSave = () => {}}) => {
   const [snsClicked, setSNS] = useState();
-  let shareUrl;
-  if (localStorage.getItem('currentKey') !== null) {
-    const shareKey = localStorage.getItem('currentKey');
-    shareUrl = `https://met-zskylarli.vercel.app/savedhome?key=${shareKey}`;
-  } else {
-    shareUrl = 'https://met-zskylarli.vercel.app/';
-  }
+  let shareUrl = 'https://met-zskylarli.vercel.app/';
 
   let animationClass;
   if (snsClicked){
@@ -24,6 +18,14 @@ const Navbar = ({handleClick = () => {}, handleSave = () => {}}) => {
   } else {
     animationClass = "disappearPie";
   }
+
+  useEffect(() => {
+    
+    if (localStorage.getItem('currentKey') !== null) {
+      const shareKey = localStorage.getItem('currentKey');
+      shareUrl = `https://met-zskylarli.vercel.app/savedhome?key=${shareKey}`;
+    } 
+  })
 
   return (
     <div>
