@@ -25,6 +25,8 @@ const ArtworkTab = () => {
 	const [empty, setEmpty] = useState(false);
 	const [resEdited, setObjectIDs] = useState([]);
 
+	let res;
+
 	const fetchDefault = async () => {
 		const date = await getObjectByTimeRange(router.query.begin, router.query.end, router.query.keyword);
 		const culture = await getObjectByArtistCulture(router.query.keyword);
@@ -32,7 +34,6 @@ const ArtworkTab = () => {
 		const geolocation = await getObjectByGeolocation(router.query.keyword, router.query.query);
 		const resArray = [culture, medium, geolocation, date];
 		
-		let res;
 		const max = Math.max(culture.total, medium.total, geolocation.total, date.total);
 
 		if (router.query.theme === "artistculture" && culture.total !== 0) {
@@ -134,10 +135,11 @@ const ArtworkTab = () => {
 	let gallery = `gallery${galleryNum}`;
 
 	const generateTripKey = async () => {
-		if (localStorage.getItem('currentKey') === null) {
-			const trip = await saveTrip(resEdited);
-			localStorage.setItem('currentKey', trip.key);
-		} 
+		// if (localStorage.getItem('currentKey') === null) {
+		console.log(res);
+		console.log(resEdited);
+		const trip = await saveTrip(resEdited);
+		localStorage.setItem('currentKey', trip.key);
 
 		const shareKey = localStorage.getItem('currentKey');
 		const el = document.createElement('textarea');

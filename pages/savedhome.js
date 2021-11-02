@@ -21,13 +21,15 @@ const ArtworkTab = () => {
 
   let key;
 	const fetchDefault = async () => {
-    if(router.query.key == 'undefined'){
+
+    if(router.query.key !== undefined){
+      key = router.query.key;
+    } else {
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       key = urlParams.get('key');
-    } else {
-      key = router.query.key;
     }
+
 		const res = await getTrip(key);
     console.log(res);
     const limit = res.artworks.length;
