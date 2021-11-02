@@ -326,8 +326,8 @@ const ArtworkTab = () => {
     			justify-content: center;
 					flex-direction: column;
 					position: relative;
-					left: 50%;
-					width: 50%;
+					left: 45%;
+					width: 55%;
 					background-color: #E4022B;
 					height: 20vh;
 					color: white;
