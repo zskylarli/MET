@@ -10,8 +10,13 @@ import {
 
 const Navbar = ({handleClick = () => {}, handleSave = () => {}}) => {
   const [snsClicked, setSNS] = useState();
-  const shareKey = localStorage.getItem('currentKey');
-  const shareUrl = `https://met-zskylarli.vercel.app/savedhome?key=${shareKey}`;
+  let shareUrl;
+  if (localStorage.getItem('currentKey') !== null) {
+    const shareKey = localStorage.getItem('currentKey');
+    shareUrl = `https://met-zskylarli.vercel.app/savedhome?key=${shareKey}`;
+  } else {
+    sharUrl = 'https://met-zskylarli.vercel.app/';
+  }
 
   let animationClass;
   if (snsClicked){
