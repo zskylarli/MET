@@ -94,7 +94,7 @@ const SearchForm = () => {
       }}
       as={`/${name}strip`}
     >
-      <input value="Send" id="form_button" onClick={handleClick}/>
+      <button value="Send" id="form_button" onClick={handleClick}/>
     </Link>
     </div>
   </form>
