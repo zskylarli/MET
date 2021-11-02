@@ -24,7 +24,7 @@ const ArtworkTab = () => {
     if(router.query.key == 'undefined'){
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
-      key = urlParams.get('key')
+      key = urlParams.get('key');
     } else {
       key = router.query.key;
     }
