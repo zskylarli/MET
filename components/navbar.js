@@ -15,7 +15,7 @@ const Navbar = ({handleClick = () => {}, handleSave = () => {}}) => {
     const shareKey = localStorage.getItem('currentKey');
     shareUrl = `https://met-zskylarli.vercel.app/savedhome?key=${shareKey}`;
   } else {
-    sharUrl = 'https://met-zskylarli.vercel.app/';
+    shareUrl = 'https://met-zskylarli.vercel.app/';
   }
 
   let animationClass;
